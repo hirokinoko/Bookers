@@ -1,0 +1,43 @@
+<% if flash[:notice] %>
+  <p class = "notice"><%= flash[:notice] %></p>
+<% end %>
+<h1>Books</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Body</th>
+    </tr>
+  <% @books.each do |book| %>
+    <tr>
+      <td><%= book.title %></td>
+      <td><%= book.body %></td>
+      <td><%= link_to "Show", book_path(book) %></td>
+      <td><%= link_to "Edit", edit_book_path(book) %></td>
+      <td><%= link_to "Destroy", book, method: :delete, data: { confirm: "Are you sure?" }  %></td>
+    </tr>
+  <% end %>
+  </thead>
+</table>
+
+<h2>New book</h2>
+<%= form_with(model:@book, local: true) do |form| %> <!--バリデーションチェック-->
+    <% if @book.errors.any? %> <!--ここからエラ〜メッセージ-->
+      <div>
+        <h2><%= pluralize(@book.errors.count, "error") %> prohibited this book from being saved:</h2>
+
+        <ul>
+          <% @book.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+<% end %>
+<%= form_with model:@book, local:true do |f| %>
+  <p class = "label">Title</p>
+  <div class = "field"><%= f.text_field :title, class: "book_title" %></div>
+  <p class = "label">Body</p>
+  <div class = "field"><%= f.text_area :body,  class: "book_body" %></div>
+  <div class = "actions"><%= f.submit 'Create Book', class: "book_button" %></div>
+<% end %>
